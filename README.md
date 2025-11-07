@@ -2,10 +2,11 @@
 
 A modern, responsive website for professional massage therapist Antonie Mira Zenetova Aon-T, offering various massage services with home visits in Prague.
 
-![Website Preview](https://via.placeholder.com/800x400?text=Massage+Website+Preview)
+
 
 ## 🌐 Live Demo
-[View Live Website](https://your-massage-site.netlify.app)
+
+https://aon-t-masaz.netlify.app/
 
 ## 📋 Project Overview
 Professional website for massage therapy business featuring online booking, service showcase, and mobile-responsive design.
