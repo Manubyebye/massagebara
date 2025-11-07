@@ -252,50 +252,70 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact-section">
-        <div class="container">
-            <div class="contact-form-container">
-                <div class="contact-form">
-                    <h2 class="text-white text-center mb-4">Rezervovat Masáž</h2>
-                    <form name="contact" netlify>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Vaše jméno" required>
-                            </div>
-                            <div class="form-group">
-                                <input type="email" class="form-control" placeholder="Váš email" required>
-                            </div>
+   <!-- Contact Section -->
+<section id="contact" class="contact-section">
+    <div class="container">
+        <div class="contact-form-container">
+            <div class="contact-form">
+                <h2 class="text-dark text-center mb-4">Rezervovat Masáž</h2>
+                <form name="contact" method="POST" netlify netlify-honeypot="bot-field">
+                    <input type="hidden" name="form-name" value="contact" />
+                    <p class="hidden">
+                        <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+                    </p>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="name" placeholder="Vaše jméno" required>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Datum">
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" placeholder="Čas">
-                            </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control" name="email" placeholder="Váš email" required>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <select class="form-control">
-                                    <option selected>Typ masáže</option>
-                                    <option value="1">Sportovní Masáž</option>
-                                    <option value="2">Zdravotní Masáž</option>
-                                    <option value="3">Tantrická Masáž</option>
-                                    <option value="4">Masáž čaker</option>
-                                    <option value="5">Relaxační Masáž</option>
-                                    <option value="6">Lymfatická Masáž</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <button class="btn btn-primary btn-block" type="submit">Rezervovat Masáž</button>
-                            </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="tel" class="form-control" name="phone" placeholder="Váš telefon">
                         </div>
-                    </form>
-                </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="date" placeholder="Preferované datum">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <select class="form-control" name="massage-type" required>
+                                <option value="" selected disabled>Typ masáže</option>
+                                <option value="sportovni">Sportovní Masáž</option>
+                                <option value="zdravotni">Zdravotní Masáž</option>
+                                <option value="tantricka">Tantrická Masáž</option>
+                                <option value="cakry">Masáž čaker</option>
+                                <option value="relaxacni">Relaxační Masáž</option>
+                                <option value="lymfaticka">Lymfatická Masáž</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" name="duration">
+                                <option value="" selected disabled>Délka masáže</option>
+                                <option value="60">60 minut</option>
+                                <option value="90">90 minut</option>
+                                <option value="120">120 minut</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <textarea class="form-control" name="message" placeholder="Vaše zpráva nebo speciální požadavky..." rows="4"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <button class="btn btn-primary btn-block" type="submit">Odeslat rezervaci</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Opening Hours -->
     <section class="hours-section">

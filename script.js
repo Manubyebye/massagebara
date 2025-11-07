@@ -298,50 +298,119 @@ function initAnimations() {
 
 // Form handling
 function initForms() {
-    const forms = document.querySelectorAll('form');
+    const forms = document.querySelectorAll('form[netlify]');
     
     forms.forEach(form => {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
             // Simple form validation
-            const inputs = form.querySelectorAll('input[required]');
+            const requiredInputs = form.querySelectorAll('[required]');
             let isValid = true;
             
-            inputs.forEach(input => {
+            requiredInputs.forEach(input => {
                 if (!input.value.trim()) {
                     isValid = false;
                     input.style.borderColor = 'red';
+                    // Add error message
+                    if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('error-message')) {
+                        const errorMsg = document.createElement('div');
+                        errorMsg.className = 'error-message';
+                        errorMsg.style.color = 'red';
+                        errorMsg.style.fontSize = '0.8rem';
+                        errorMsg.style.marginTop = '5px';
+                        errorMsg.textContent = 'Toto pole je povinné';
+                        input.parentNode.appendChild(errorMsg);
+                    }
                 } else {
                     input.style.borderColor = '';
+                    // Remove error message
+                    const errorMsg = input.parentNode.querySelector('.error-message');
+                    if (errorMsg) {
+                        errorMsg.remove();
+                    }
                 }
             });
             
             if (isValid) {
-                // Show success message
+                // Show loading state
                 const submitBtn = form.querySelector('button[type="submit"]');
                 const originalText = submitBtn.textContent;
                 
                 submitBtn.textContent = 'Odesílání...';
                 submitBtn.disabled = true;
                 
-                // Simulate form submission
-                setTimeout(() => {
-                    submitBtn.textContent = 'Úspěšně odesláno!';
-                    submitBtn.style.background = '#28a745';
-                    
-                    setTimeout(() => {
-                        submitBtn.textContent = originalText;
-                        submitBtn.disabled = false;
-                        submitBtn.style.background = '';
+                // Create FormData object
+                const formData = new FormData(form);
+                
+                // Submit to Netlify
+                fetch('/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(formData).toString()
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Show success message
+                        showFormMessage(form, 'Děkujeme za vaši rezervaci! Brzy vás budeme kontaktovat.', 'success');
                         form.reset();
-                    }, 2000);
-                }, 1500);
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                })
+                .catch(error => {
+                    console.error('Form submission error:', error);
+                    showFormMessage(form, 'Omlouváme se, nastala chyba. Zkuste to prosím znovu.', 'error');
+                })
+                .finally(() => {
+                    // Reset button state
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                });
             } else {
-                alert('Prosím vyplňte všechna povinná pole.');
+                showFormMessage(form, 'Prosím vyplňte všechna povinná pole.', 'error');
             }
         });
+        
+        // Real-time validation
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.hasAttribute('required') && this.value.trim()) {
+                    this.style.borderColor = '';
+                    const errorMsg = this.parentNode.querySelector('.error-message');
+                    if (errorMsg) {
+                        errorMsg.remove();
+                    }
+                }
+            });
+        });
     });
+}
+
+// Helper function to show form messages
+function showFormMessage(form, message, type) {
+    // Remove existing messages
+    const existingMsg = form.querySelector('.form-message');
+    if (existingMsg) {
+        existingMsg.remove();
+    }
+    
+    // Create new message
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `form-message ${type === 'success' ? 'form-success' : 'form-error'}`;
+    messageDiv.textContent = message;
+    
+    // Insert before the submit button
+    const submitBtn = form.querySelector('button[type="submit"]');
+    form.insertBefore(messageDiv, submitBtn.parentNode);
+    
+    // Auto-remove success messages after 5 seconds
+    if (type === 'success') {
+        setTimeout(() => {
+            messageDiv.remove();
+        }, 5000);
+    }
 }
 
 // Ripple effect for buttons
